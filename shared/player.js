@@ -23,6 +23,7 @@ export class PlayerControl {
     this.progress = 0;
     this.devices = [];
     this.context = null;
+    this.playlistName = null;
   }
 
   connect() {
@@ -132,6 +133,7 @@ export class PlayerControl {
           songId = "",
           queue = [],
           context = null,
+          playlistName = null
         } = data;
 
         if (!this.player.isPlaying) {
@@ -144,6 +146,7 @@ export class PlayerControl {
         this.progress = progress;
         this.queue = queue;
         this.context = context;
+        this.playlistName = playlistName;
         isLiked ? (this.likeState = "liked") : (this.likeState = "notLiked");
         isShuffled
           ? (this.shuffleState = "shuffle")

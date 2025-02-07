@@ -585,7 +585,7 @@ export const getStyles = (deviceName) => {
       SPOTIFY_ICON: SPOTIFY_ICON.band7,
       QUEUED_SONG: QUEUED_SONG.band7,
     };
-  else if (deviceName == "GTS 4 mini")
+  else if (deviceName == "GTS 4 mini" || deviceName == "Amazfit Bip 5")
     return {
       DEVICES_BUTTON: DEVICES_BUTTON.gts4mini,
       SONG: SONG.gts4mini,

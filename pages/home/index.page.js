@@ -19,7 +19,7 @@ let queueList = []; // references widgets
 Page({
   state: {},
   build() {
-    hmUI.updateStatusBarTitle("player");
+    hmUI.updateStatusBarTitle("Spotify");
     hmApp.setLayerY(-DEVICE_HEIGHT);
     this.refresh();
     hmApp.setScreenKeep(true);
@@ -126,6 +126,11 @@ Page({
   refresh() {
     // Refresh UI
     timer.createTimer(0, 150, () => {
+
+      if (playerControl.playlistName != null) {
+        hmUI.updateStatusBarTitle(playerControl.playlistName);
+      }
+
       song.setProperty(hmUI.prop.MORE, {
         text: playerControl.song,
       });

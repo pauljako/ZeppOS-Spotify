@@ -79,6 +79,35 @@
       ],
       "designWidth": 336
     },
+    "bip5": {
+      "module": {
+        "page": {
+          "pages": [
+            "pages/home/index.page",
+            "pages/library/library.page",
+            "pages/playlist/playlist.page",
+            "pages/devices/devices.page"
+          ]
+        },
+        "app-side": {
+          "path": "app-side/index"
+        },
+        "setting": {
+          "path": "setting/index"
+        }
+      },
+      "platforms": [
+        {
+          "name": "bip-5",
+          "deviceSource": 8454400
+        },
+        {
+          "name": "bip-5-w",
+          "deviceSource": 8454401
+        }
+      ],
+      "designWidth": 380
+    },
     "gts3": {
       "module": {
         "page": {

@@ -102,7 +102,7 @@ const getQueue = async (ctx) => {
 const getAllPlaylists = async (ctx) => {
   try {
     const res = await fetch({
-      url: `https://api.spotify.com/v1/me/playlists?limit=10`,
+      url: `https://api.spotify.com/v1/me/playlists?limit=30`,
       method: "GET",
       headers: {
         Authorization: `Bearer ${SPOTIFY_AUTH_TOKEN}`,
@@ -122,6 +122,36 @@ const getAllPlaylists = async (ctx) => {
     ctx.response({
       data: {
         playLists: playLists,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const getAllDevices = async (ctx) => {
+  try {
+    const res = await fetch({
+      url: `https://api.spotify.com/v1/me/player/devices`,
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${SPOTIFY_AUTH_TOKEN}`,
+      },
+    });
+    const { status } = res;
+    if (status >= 400) return;
+
+    const { body = {} } = res;
+    const { items = [] } = body; //JSON.parse(body); // body
+
+    let devices = [];
+    items.forEach((item) => {
+      const { name = "", id = "" } = item;
+      devices.push({ name, id });
+    });
+    ctx.response({
+      data: {
+        devices: devices,
       },
     });
   } catch (error) {
@@ -220,6 +250,7 @@ const player = async (ctx, func = "", args = "") => {
           songId: "id",
           queue: [],
           context: null,
+          playlistName: null
         },
       });
       return;
@@ -234,6 +265,7 @@ const player = async (ctx, func = "", args = "") => {
         progress: 0,
         songId: "",
         context: null,
+        playlistName: null
       });
     }
 
@@ -250,6 +282,7 @@ const player = async (ctx, func = "", args = "") => {
     const isLiked = await isSongLiked(id);
     const progress = (progress_ms * 100) / duration_ms / 100;
     const queue = await getQueue();
+    const playlist_name = await getCurrentPlaylistName();
     ctx.response({
       data: {
         songName: name,
@@ -261,6 +294,7 @@ const player = async (ctx, func = "", args = "") => {
         songId: id,
         queue: queue.slice(0, 16),
         context: context.uri,
+        playlistName: playlist_name
       },
     });
   } catch (error) {
@@ -294,6 +328,7 @@ AppSideService({
             songId: "id",
             queue: [],
             context: null,
+            playlistName: null
           },
         });
         return;
@@ -306,6 +341,8 @@ AppSideService({
         return tracks(ctx, jsonRpc.method, jsonRpc.curSongId);
       } else if (jsonRpc.func == "getAllPlaylists") {
         return getAllPlaylists(ctx);
+      } else if (jsonRpc.func == "getAllDevices") {
+        return getAllDevices(ctx);
       } else if (jsonRpc.func == "playlistInfo") {
         return playlist(ctx, jsonRpc.playlistId);
       } else if (jsonRpc.func == "startPlaylist") {
